@@ -5,19 +5,18 @@ import bcrypt from "bcryptjs";
 import { request } from "https";
 import { error } from "console";
 import { where } from "sequelize";
-export const addCategory=async(request,response,next)=>
+export const saveInBulk=async(request,response,next)=>
 {
-    try{
-         const {name,description}=request.body;
-         const newCategory= await Category.create({
-            name,description,
-         });
-         return response.status(201).json({message:"categrory added succesfully",Category:newCategory});   
-    }
-    catch(err)
+    Category.bulkCreate(request.body)
+    .then((result)=>
     {
+        return response.status(200).json({message:"categrory added succesfully"});   
+    })
+    .catch((err)=>
+    {
+        console.log(err);
         return response.status(500).json({error:"internal error"})
-    }
+    });
 };
 
 export const viewCategory=async(request,response,next)=>
@@ -52,15 +51,16 @@ export const deleteCategory = async (request, response, next) => {
 };
 
 
-export const updateCategory=async(request,response,next)=>
-{
-    try{
-        let {id}=request.params;
-        let{name,description}=request.body;
-        await Category.update({name,description},{where:{id}});
-            return response.status(201).json({message:"update category success"});
-    }
-    catch(err){
-     return response.status(401).json({error:"update server error"});
-    }
-};
+// export const updateCategory=(request,response,next)=>
+// {
+//     const id =request.params.id;
+//     Category.update(request.body.products,{where:{id}})
+//     .then((result)=>
+//     {
+//         return response.status(201).json({result})
+
+//     }).catch((err)=>{
+//         console.log(err);
+  
+// });
+// };

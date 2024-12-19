@@ -7,20 +7,15 @@ import { error, log } from "console";
 import Category from "../model/category.model.js";
 import Product from "../model/product.model.js";
 import { where } from "sequelize";
-export const addProduct = async (request, response, next) => {
-    try {
-        const { name, price, description, categoryId } = request.body;
-        console.log(request.body)
-        const newProduct = await product.create({
-            name, price, description, categoryId
-        });
-        return response.status(201).json({ message: "product added succesfull", product: newProduct });
-
-    }
-    catch (err) {
+export const saveInBulk = async (request, response, next) => {
+         product.bulkCreate(request.body.products)
+         .then((result)=>
+        {
+            return response.status(200).json({ message: "product added succesfull" });
+        }).catch ((err)=>{
         console.log("error in addproduct", err)
         return response.status(500).json({ error: "internal error" });
-    }
+        });
 };
 
 export const viewProduct = async (request, response, next) => {
@@ -54,17 +49,28 @@ export const deleteProduct = async (request, response, next) => {
     }
 };
 
-export const updateProdect =async(request,response,next)=>
-{
-    try{
-        let {id}=request.params;
-        let {name ,price,description}=request.body;
-        await Product.update({name,price,description},{where:{id}});
-            return response.status(201).json({message:"update product success"})
-    }
+// export const updateProdect = async (request, response, next) => {
+//     try {
+//         const { id } = request.params;  
+//         const updateData = request.body.products; 
+//         console.log(request.body);
         
-    catch(err)
-    {
-        return response.status(401).json({error:"update server error"})
-    }
-};
+//         if (!updateData) {
+//             return response.status(400).json({ error: "No data provided for update" });
+//         }
+
+//         let result = await Product.update(updateData, { where: { id } });
+
+        
+//         if (result[0] === 0) {
+//             return response.status(404).json({ error: "Product not found" });
+//         }
+
+        
+//         return response.status(200).json({ message: "Product updated successfully" });
+
+//     } catch (err) {
+//         console.log(err);  
+//         return response.status(500).json({ error: "Server error during update" });
+//     }
+// };

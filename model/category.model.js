@@ -3,22 +3,18 @@ import sequelize  from "../db/dbConfig.js";
 import Product from "./product.model.js";
 const Category=sequelize.define("Category",
     {
-        id:
+        slug:
         {
-            type:DataTypes.INTEGER,
-            primaryKey:true,
-            autoIncrement:true,
+            type:DataTypes.STRING, 
         },
         name:
         {
            type:DataTypes.STRING,
-           allowNull:false,
-
         },
-        description:
+         url:
         {
             type:DataTypes.STRING,
-            allowNull:true
+            allowNull:false,
         },
 
     });

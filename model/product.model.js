@@ -1,49 +1,42 @@
 import { Sequelize, DataTypes } from "sequelize";
 import sequelize from "../db/dbConfig.js";
 import Category from "./category.model.js";
+import { title } from "process";
 
-const Product=sequelize.define('Product',
-    {
-        id:
-        {
-            type:DataTypes.INTEGER,
-            primaryKey:true,
-            autoIncrement:true
-        },
-        name:{
-            type:DataTypes.STRING,
-            allowNull:false
-        },
-        price:
-        {
-            type:DataTypes.FLOAT,
-            allowNull:false
-        },
-        description:
-        {
-            type:DataTypes.STRING,
-            allowNull:true
-        },
-        categoryId:
-        {
-            type:DataTypes.INTEGER,
-            references:
-            {
-                model:Category,
-                key:'id',
-            },
-            allowNull:false 
-        },
-    });
+const product = sequelize.define('product',{
+    id:{
+        type: DataTypes.INTEGER,
+        primaryKey:true,
+        autoIncrement:true,
+    },
+    title:{
+        type:DataTypes.STRING,
+        allowNull:false,
+    },
+    description:{ type:DataTypes.STRING},
+    category:{ type:DataTypes.STRING},
+    price:{
+        type:DataTypes.DECIMAL,
+        allowNull:false,
+    },
+    discountPercentage:{ type:DataTypes.FLOAT},
+    rating:{ type:DataTypes.FLOAT},
+    stock:{ type:DataTypes.INTEGER},
+    brand:{ type:DataTypes.STRING},
+    warrantyInformation:{ type:DataTypes.STRING},
+    shippingInformation:{ type:DataTypes.STRING},
+    availabilityStatus:{type:DataTypes.STRING},
+    thumbnail:{ type:DataTypes.STRING}
+},{
+    timestamps:false
+}
+);
+sequelize.sync()
+.then(()=>{
+    console.log(" Product Table Created.......");
+}).catch((err)=>{
+    
+    console.log(err);
+});
 
-    // Product.belongsTo(Category,{foreignKey:"categoryId"});
-    sequelize.sync()
-    .then(()=>
-    {
-        console.log("Product table create");
-
-    }).catch(err=>
-    {
-        console.log(err)
-    });
-    export default Product;
+export default product;
